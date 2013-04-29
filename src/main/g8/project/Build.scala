@@ -1,6 +1,7 @@
 import sbt._
 import Keys._
 
+
 // sbt-release plugin
 import sbtrelease.ReleasePlugin._
 import sbtrelease._
@@ -32,14 +33,12 @@ object $name$Build extends Build {
             commitReleaseVersion,                   // : ReleaseStep, performs the initial git checks
             tagRelease,                             // : ReleaseStep
             publishArtifacts,                       // : ReleaseStep, checks whether `publishTo` is properly set up
-            uploadArtifacts,                        // : ReleaseStep, uploads generated artifacts to s3
             setNextVersion,                         // : ReleaseStep
             commitNextVersion,                      // : ReleaseStep
             pushChanges                             // : ReleaseStep, also checks that an upstream branch is properly configured
           )
         }
-      ) 
-	  ++ graphSettings 
+      )
 	  ++ ScalariformPlugin.defaultScalariformSettings 
 	  ++ Seq(
         ScalariformPlugin.ScalariformKeys.preferences := FormattingPreferences().
