@@ -46,7 +46,7 @@ object $name$Build extends Build {
           setPreference(AlignParameters, true).
           setPreference(CompactControlReadability, true)
 		  )
-  ) setting (
+  ) settings (
 	adminConsole <<= Defaults.consoleTask(fullClasspath in Compile,adminConsole),
 	initialCommands in adminConsole := initialConsoleString,
 	libraryDependencies := dependencies,
