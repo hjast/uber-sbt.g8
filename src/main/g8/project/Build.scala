@@ -50,15 +50,15 @@ object $name$Build extends Build {
 	adminConsole <<= Defaults.consoleTask(fullClasspath in Compile,adminConsole),
 	initialCommands in adminConsole := initialConsoleString,
 	resolvers := Resolvers.all,
-	libraryDependencies := dependencies,
+	libraryDependencies := dependencies
   )
   
   //Change this to change your custom console for more imports. 
   //Anthing added to console will be here automatically 
   val initialConsoleString: String = """
   	println("Welcome to the utility console")
-	Console.init
-	import Console._
+	AdminConsole.init
+	import AdminConsole._
   """
 
 }

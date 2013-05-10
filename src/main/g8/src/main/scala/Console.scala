@@ -1,6 +1,6 @@
 
 /** Anything which you should auto give access to in the console-admin */
-object Console {
+object AdminConsole {
 
   def status = {
   }
