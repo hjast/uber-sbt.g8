@@ -4,6 +4,8 @@ import ReleaseStateTransformations._
 
 import $name$Build._
 
+import Dependencies._
+
 name := "$name$"
 
 organization := "$org$"
