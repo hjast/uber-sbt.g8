@@ -50,8 +50,7 @@ object $name$Build extends Build {
 	adminConsole <<= Defaults.consoleTask(fullClasspath in Compile,adminConsole),
 	initialCommands in adminConsole := initialConsoleString,
 	libraryDependencies := dependencies,
-	resolvers := Resolvers.all,
-	console 
+	resolvers := Resolvers.all
   )
   
   //Change this to change your custom console for more imports. 
