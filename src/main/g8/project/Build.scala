@@ -55,7 +55,7 @@ object $name$Build extends Build {
   
   //Change this to change your custom console for more imports. 
   //Anthing added to console will be here automatically 
-  val initialConsole: String = """
+  val initialConsoleString: String = """
   	println("Welcome to the utility console")
 	Console.init
 	import Console._
