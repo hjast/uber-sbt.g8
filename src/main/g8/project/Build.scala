@@ -17,6 +17,8 @@ object $name$Build extends Build {
   //type Dependencies. and get autocomplete
   val dependencies = Seq(scalaz.core, specs2, logback) 
   
+  val adminConsole       = TaskKey[Unit]("console-admin", "This includes any useful admin tasks.")
+  
   lazy val $name$ = Project(
     id = "$name$",
     base = file("."),
@@ -45,8 +47,16 @@ object $name$Build extends Build {
           setPreference(CompactControlReadability, true)
 		  )
   ) setting (
+	adminConsole <<= Defaults.consoleTask(fullClasspath in Compile,adminConsole),
+	initialCommands in adminConsole := initialConsoleString,
 	libraryDependencies := dependencies,
-	resolvers := Resolvers.all
+	resolvers := Resolvers.all,
+	console 
   )
+  
+  //Change this to change your custom console. 
+  val initialConsole: String = """
+  	println("Welcome to the utility console for $name")
+  """
 
 }
