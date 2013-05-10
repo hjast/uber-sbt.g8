@@ -1,8 +1,6 @@
 import sbt._
 import Keys._
 
-
-// sbt-release plugin
 import sbtrelease.ReleasePlugin._
 import sbtrelease._
 import ReleaseStateTransformations._
@@ -15,15 +13,17 @@ object $name$Build extends Build {
 
   import Dependencies._
   
-  val depends = Seq(scalaz, specsDeps) 
+  //Please add any dependencies here. Check a full list of pre created dependencies in the Dependencies or
+  //type Dependencies. and get autocomplete
+  val dependencies = Seq(scalaz.core, specs2, logback) 
   
   lazy val $name$ = Project(
     id = "$name$",
     base = file("."),
     settings = Defaults.defaultSettings 
 	++ releaseSettings 
+	++ net.virtualvoid.sbt.graph.Plugin.graphSettings
 	++ Seq(
-
         releaseProcess <<= thisProjectRef apply { ref =>
           Seq[ReleaseStep](
             checkSnapshotDependencies,              // : ReleaseStep
@@ -32,7 +32,6 @@ object $name$Build extends Build {
             setReleaseVersion,                      // : ReleaseStep
             commitReleaseVersion,                   // : ReleaseStep, performs the initial git checks
             tagRelease,                             // : ReleaseStep
-            publishArtifacts,                       // : ReleaseStep, checks whether `publishTo` is properly set up
             setNextVersion,                         // : ReleaseStep
             commitNextVersion,                      // : ReleaseStep
             pushChanges                             // : ReleaseStep, also checks that an upstream branch is properly configured
@@ -46,7 +45,8 @@ object $name$Build extends Build {
           setPreference(CompactControlReadability, true)
 		  )
   ) setting (
-	libraryDependencies := depends
+	libraryDependencies := dependencies,
+	resolvers := Resolvers.all
   )
 
 }

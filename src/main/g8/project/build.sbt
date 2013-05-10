@@ -18,3 +18,6 @@ addSbtPlugin("com.github.mpeltonen" % "sbt-idea" % "1.4.0")
 addSbtPlugin("com.typesafe.sbtscalariform" % "sbtscalariform" % "0.5.1")
 
 addSbtPlugin("com.eed3si9n" % "sbt-buildinfo" % "0.2.2")
+
+// Uncomment is you want Ls-sbt support
+// addSbtPlugin("me.lessis" % "ls-sbt" % "0.1.2")

@@ -17,112 +17,257 @@ object Resolvers {
 
   val sonatypeReleases = "releases" at "http://oss.sonatype.org/content/repositories/releases"
 
-  val sportaneousResolvers =
+  val sprayResolver = "spray repo" at "http://repo.spray.io"
+  val all =
     Seq(typeSafeRelease, typeSafeSnapshots, javaNet, mavenLocal, sunrepo,
-      scalatoolsSnapshots, sonatypeSnapshots, sonatypeReleases, akkaSnapshots)
+      scalatoolsSnapshots, sonatypeSnapshots, sonatypeReleases, akkaSnapshots, sprayResolver)
 }
 
-object Dependencies {
 
-  def crossMapped(mappings: (String, String)*): CrossVersion =
-    CrossVersion.binaryMapped(Map(mappings: _*) orElse {
-      case v => v
-    })
+trait Scalaz extends Crossmapping {
+	val scalazVersion = "7.0.0" 
+	val scalazContrib = "0.1.4"
+	
+	/* A robust fully functional functional programming library for Scala */ 
+	def scalazCore = "org.scalaz" %% "scalaz-core" % "7.0.0" withSources() cross CVMapping10010
+	
+	def scalazContribCore  = "org.typelevel" %% "scalaz-contrib-210"        % scalazContrib
+  def scalazValidation = "org.typelevel" %% "scalaz-contrib-validation" % scalazContrib
+  def scalazUndo =  "org.typelevel" %% "scalaz-contrib-undo"       % scalazContrib
+  def scalazDispatch = "org.typelevel" %% "scalaz-dispatch"           % scalazContrib
+  def scalazLift =  "org.typelevel" %% "scalaz-lift"               % scalazContrib
+  def scalazTime = "org.typelevel" %% "scalaz-nscala-time"        % scalazContrib
+  def scalazSpire = "org.typelevel" %% "scalaz-spire"              % scalazContrib
+	
+}
 
-  lazy val CVMapping10010 = crossMapped("2.10.0" -> "2.10")
+/** Functional language extensions **/
+trait Shapeless extends Crossmapping {
+	
+	val shapelessVersion = "1.2.4" 
+	val shapelessContribVersion =  "0.1.1"
+	/** 
+	A library with support for advancded type level programming including a unbelievable 
+	HList version. 
+	*/
+	def shapelessCore =  "com.chuusai" %% "shapeless" % "1.2.4" withSources()
 
-  /** Versions **/
-  val jettyVersion = "6.1.22"
-  val akkaVersion = "2.2-M2"
+	/** Contribution for interloping shapeless with other libraries **/
+	def shapelessScalacheck =     "org.typelevel" %% "shapeless-scalacheck" % shapelessContribVersion
+	def shapelessSpire =     "org.typelevel" %% "shapeless-spire" % shapelessContribVersion
+	def shapelessScalaz =     "org.typelevel" %% "shapeless-scalaz" % shapelessContribVersion 
 
-  val liftVersion = "2.5-RC5" //TODO Change this
-  val rogueVersion = "2.0.0-beta22"
-  val dispatchVersion = "0.8.9"
-  val rebootVersion = "0.10.0"
+}
 
-  /** Jetty & Friends **/
+trait Testing extends Crossmapping {
+	val specs2Version = "1.14.1-SNAPSHOT" 
+	
+	/** The best BDD library for Scala with a large community **/
+	def specs2 = "org.specs2" %% "specs2" % specs2Version % "test" cross CVMapping10010
+	
+	/** Tradational JUnit **/
+	def junit = "junit" % "junit" % "4.5"
+}
 
-  val jetty6 = "org.mortbay.jetty" % "jetty" % jettyVersion % "container"
-  val jetty6Test = "org.mortbay.jetty" % "jetty" % jettyVersion % "test"
-  val jetty7 = "org.eclipse.jetty" % "jetty-webapp" % "7.3.0.v20110203" % "jetty"
-  val jetty7security = "org.eclipse.jetty" % "jetty-security" % "7.3.0.v20110203"
+trait WebContainers extends Crossmapping {
+	val jettyVersion = "6.1.22"
 
-  /** Logging **/
+	def jetty6 = "org.mortbay.jetty" % "jetty" % jettyVersion % "container"
+	def jetty6Test = "org.mortbay.jetty" % "jetty" % jettyVersion % "test"
+	def jetty7 = "org.eclipse.jetty" % "jetty-webapp" % "7.3.0.v20110203" % "jetty"
+	def jetty7security = "org.eclipse.jetty" % "jetty-security" % "7.3.0.v20110203"  
+}
 
-  val slf4j    = "org.slf4j" % "slf4j-log4j12" % "1.6.1" % "test"
-  val slf4jNon = "org.slf4j" % "slf4j-api" % "1.6.1"
-  val logback  = "ch.qos.logback" % "logback-classic" % "0.9.30"
-  val logLady  = "org.eintr.loglady" %% "loglady" % "1.0.0"
+trait Logging extends Crossmapping {
 
-  /** Akka & Friends **/
+	def scalaLogging = "com.typesafe" %% "scalalogging-log4j" % "1.1.0-SNAPSHOT"
+  	def slf4j = "org.slf4j" % "slf4j-api" % "1.7.2"
+  	def logback  = "ch.qos.logback" % "logback-classic" % "0.9.30"
+  	def logLady  = "org.eintr.loglady" %% "loglady" % "1.0.0"
+}
 
-  def akka(name: String, v: String = akkaVersion) =
-    "com.typesafe.akka" %% ("akka-%s" format name) % v withSources() cross CVMapping10010
+trait Lift extends Crossmapping {
+	val liftVersion = "2.5-RC5" //TODO Change this
+	
+    def lift(name: String, v: String = liftVersion) =
+      "net.liftweb" %% ("lift-%s" format name) % v withSources() exclude("joda-time", "joda-time") cross CVMapping10010
 
-  def akkaDeps(v: String = akkaVersion) = Seq(akka("actor",v), akka("kernel", v), akka("slf4j", v))
+	def liftWebkit = lift("webkit") 
+	def liftMapper = lift("mapper") 
+	def liftRecord = lift("record") 
+	def liftWizard = lift("wizard") 
+	def liftJson = lift("json") 
+	def  liftMongo = lift("mongodb") 
+	def liftMongodbRecord = lift("mongodb-record") 
+}
 
-  /** Lift **/
 
-  def lift(name: String, v: String = liftVersion) =
-    "net.liftweb" %% ("lift-%s" format name) % v withSources() exclude("joda-time", "joda-time") cross CVMapping10010
+trait Akka extends Crossmapping {
+    val akkaVersion = "2.2-M2"
+	
+    def akka(name: String, v: String = akkaVersion) =
+      "com.typesafe.akka" %% ("akka-%s" format name) % v withSources() cross CVMapping10010
+   
+	  def akkaActor = akka("actor")
+	  def akkaAgent = akka("agent")
+	  def akkaCamel = akka("camel")
+	  def akkaDataflow = akka("dataflow")
+	  def akkaFileMilebox = akka("file-mailbox")
+	  def akkaKernel = akka("kernel")
+	  def akkaMailboxesCommon = akka("mailboxes-common")
+	  def akkaOsgi = akka("osgi")
+	  def akkaOsgiAries = akka("osgi-aries")
+	  def akkaRemote = akka("remote")
+	  def akkaSlf4j = akka("slf4j")
+	  def akkaTestkit = akka("testkit")
+	  def akkaTransactor = akka("transactor")
+	  def akkaZeromq = akka("zeromq")
+	
+}
 
-  def liftDeps(v: String = liftVersion) =
-    Seq(lift("webkit",v), lift("mapper",v),  lift("record",v), lift("wizard",v), lift("json",v),
-       lift("mongodb",v), lift("mongodb-record",v))
+trait Java {
+	val commonLang = "commons-lang" % "commons-lang" % "2.5" withSources()
+    val servlet = "javax.servlet" % "servlet-api" % "2.5"
+	val jodaTime = "joda-time" % "joda-time" % "2.2"
+}
 
-  val lift24Lib = liftDeps(liftVersion)
+trait NoSql extends Crossmapping {
 
-  /** Rogue **/
+	val rogueVersion = "2.0.0-beta22"
+	
+	def rogue(name: String, v: String = rogueVersion) =
+      "com.foursquare" %% ("rogue-%s" format name) % v intransitive() withSources() cross CVMapping10010
+	  
+	  def rogueField = rogue("field")
+	  def rogueCore = rogue("core")
+	  def rogueLift = rogue("lift")
+	  
+	  def rogueAll = Seq(rogueField, rogueCore, rogueLift)
 
-  def rogue(name: String, v: String = rogueVersion) =
-    "com.foursquare" %% ("rogue-%s" format name) % v intransitive() withSources() cross CVMapping10010
+}
 
-  val rogueLibs  = Seq(rogue("field"), rogue("core"), rogue("lift"))
+trait Numerical extends Crossmapping   {
+	val saddle =  "org.scala-saddle" %% "saddle" % "1.1.+"
+	val spire = "org.spire-math" %% "spire" % "0.3.0" 
+}
 
-  /** Scala utils (just include in distro) **/
+trait Spray extends Crossmapping {
+	val sprayVersion = "1.1-M7"
+	def spray(s: String) = "io.spray" % ("spray-%s" format s) % sprayVersion
+	
+	val sprayCaching = spray("caching")
+	val sprayCan = spray("can")
+	val sprayClient = spray("client")
+	val sprayHttp = spray("http")
+	val sprayHttpx = spray("httpx")
+	val sprayIo = spray("io")
+	val sprayRouting = spray("routing")
+	val sprayServlet = spray("servlet")
+	val sprayTestkit = spray("testkit")
+	val sprayUtil = spray("util")
 
-  val classutil = "org.clapper" %% "classutil" % "1.0.1" cross CVMapping10010
+}
 
-  val scalaTimeLib = "com.github.nscala-time" %% "nscala-time" % "0.2.0"
+trait Utils extends Crossmapping{
+	val scalaTimeLib = "com.github.nscala-time" %% "nscala-time" % "0.2.0"
+	//val bijection
+}
 
-  /** Dispatch & Friends **/
 
-  def databinder(name: String, v: String = dispatchVersion) =
-    "net.databinder" %% ("dispatch-" + name) % v withSources() cross CVMapping10010
 
-  def reboot(name: String, v: String = rebootVersion) =
-    "net.databinder.dispatch" %% ("dispatch-" + name) % v cross CVMapping10010
+trait Reboot extends Crossmapping {
+    /** Dispatch & Friends **/
+  
+    val rebootVersion = "0.10.0"
+ 
+    def reboot(name: String, v: String = rebootVersion) =
+      "net.databinder.dispatch" %% ("dispatch-" + name) % v cross CVMapping10010
 
-  val dispatchClassicLibs: Seq[sbt.ModuleID]  =
-    Seq(databinder("http"), databinder("oauth"), databinder("json"), databinder("mime"), databinder("http-json"))
+	  def dispatchCore = reboot("core")
+	  def dispatchNative = reboot("json4s-native")
+	  def dispatchJackson = reboot("json4s-jackson")
+	  
+	  def dispatchAll = reboot("all")
+	
+}
 
-  val rebootLibs: Seq[sbt.ModuleID]  = Seq(reboot("core"), reboot("json4s-native"))
+trait Crossmapping {
+	
+    def crossMapped(mappings: (String, String)*): CrossVersion =
+      CrossVersion.binaryMapped(Map(mappings: _*) orElse {
+        case v => v
+      })
 
-  val ning = "com.ning" % "async-http-client" % "1.7.5"
+    lazy val CVMapping10010 = crossMapped("2.10.0" -> "2.10")
 
-  val dispatchLibs = dispatchClassicLibs ++  Seq(ning)
+}
 
-  /** Java Libraries  **/
+object Dependencies
+extends Scalaz
+with Shapeless
+with Lift
+with Logging
+with Spray
+with Akka
+with Testing
+with Reboot
+with Utils
+with Numerical
+with Java
+with NoSql {
 
-  val commonLang = "commons-lang" % "commons-lang" % "2.5" withSources()
+  /** Functional programming for scala **/
+  object scalaz extends Scalaz {
+    def core = scalazCore
+    def all = Seq(scalazCore, scalazContribCore, scalazValidation, scalazUndo, scalazDispatch, scalazLift, scalazTime, scalazSpire)
+  }
+  
+  /** Advancded typelevel programming for scala **/
+  object shapeless extends Shapeless {
+    def core = shapelessCore
+    def scalacheck = shapelessScalacheck
+    def spire = shapelessSpire
+    def scalaz = shapelessScalaz
+  }
+  
+  /** Lift libraries **/
+  object lift extends Lift{
+    def all = Seq(liftWebkit, liftMapper, liftRecord, liftWizard, liftJson, liftMongo, liftMongodbRecord)
+    def webkit = liftWebkit
+    def mapper = liftMapper
+    def record = liftRecord
+    def wizard = liftWizard
+    def json = liftJson
+    def mongo = liftMongo
+    def mongoRecord = liftMongodbRecord
+  }
+  
+  /** Scala logging libraries **/
+  object logging extends Logging 
 
-  val jbCrypt = "org.mindrot" % "jbcrypt" % "0.3m" % "compile" withSources()
+  /** Spray libraries **/
+  object spray extends Spray {
+    def all = Seq(sprayCaching, sprayCan, sprayClient, sprayHttpx, sprayIo, sprayRouting, sprayServlet, sprayTestkit, sprayUtil)
+    def caching = sprayCaching
+	def can = sprayCan
+	def client = sprayClient
+	def http = sprayHttp
+	def httpx = sprayHttpx
+	def io = sprayIo
+	def routing = sprayRouting
+	def servlet = sprayServlet
+	def testkit = sprayTestkit
+	def util = sprayUtil
+  }
+  
+  /** Akka libraries **/
+  object akka extends Akka {
+	  def all = Seq(akkaActor, akkaAgent, akkaCamel, akkaDataflow, akkaFileMilebox, akkaKernel, 
+		  akkaMailboxesCommon, akkaOsgi, akkaOsgiAries,akkaRemote, akkaSlf4j, akkaTransactor, akkaTestkit, akkaZeromq)
+  }
 
-  val csvWriterScala = "com.github.tototoshi" % "scala-csv_2.9.1" % "0.3"
+  object testing extends Testing
 
-  val amazon = "com.amazonaws" % "aws-java-sdk" % "1.3.30"
-
-  /** Language extensions **/
-
-  val scalaz = "org.scalaz" %% "scalaz-core" % "7.0.0" withSources() cross CVMapping10010
-
-  /** Testing **/
-
-  val specsDeps = Seq(
-    "org.specs2" %% "specs2" % "1.14.1-SNAPSHOT" % "test" cross CVMapping10010
-  )
-
-  val servlet = "javax.servlet" % "servlet-api" % "2.5"
-  val junit = "junit" % "junit" % "4.5"
-
+  object reboot extends Reboot 
+ 
 }
