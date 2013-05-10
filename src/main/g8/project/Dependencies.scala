@@ -112,7 +112,7 @@ trait Akka extends Crossmapping {
 	  def akkaAgent = akka("agent")
 	  def akkaCamel = akka("camel")
 	  def akkaDataflow = akka("dataflow")
-	  def akkaFileMilebox = akka("file-mailbox")
+	  def akkaFileMailbox = akka("file-mailbox")
 	  def akkaKernel = akka("kernel")
 	  def akkaMailboxesCommon = akka("mailboxes-common")
 	  def akkaOsgi = akka("osgi")
@@ -169,8 +169,7 @@ trait Spray extends Crossmapping {
 }
 
 trait Utils extends Crossmapping{
-	val scalaTimeLib = "com.github.nscala-time" %% "nscala-time" % "0.2.0"
-	//val bijection
+	val scalaTime = "com.github.nscala-time" %% "nscala-time" % "0.2.0"
 }
 
 
@@ -264,6 +263,20 @@ with NoSql {
   object akka extends Akka {
 	  def all = Seq(akkaActor, akkaAgent, akkaCamel, akkaDataflow, akkaFileMilebox, akkaKernel, 
 		  akkaMailboxesCommon, akkaOsgi, akkaOsgiAries,akkaRemote, akkaSlf4j, akkaTransactor, akkaTestkit, akkaZeromq)
+		  def actor = akkaActor
+		  def agent = akkaAgent
+		  def camel = akkaCamel
+		  def dataflow = akkaDataflow
+		  def fileMailbox = akkaFileMailbox
+		  def kernel = akkaKernel
+		  def mailboxesCommon = akkaMailboxesCommon
+		  def osgi = akkaOsgi
+		  def osgiAries = akkaOsgiAries
+		  def remote = akkaRemote
+		  def slf4j = akkaSlf4j
+		  def transactor = akkaTransactor
+		  def testkit = akkaTestkit 
+		  def zeromq = akkaZeromq 
   }
 
   object testing extends Testing

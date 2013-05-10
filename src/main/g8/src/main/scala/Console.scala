@@ -1,4 +1,4 @@
-
+package $org$.$name;format="norm"$           	
 /** Anything which you should auto give access to in the console-admin */
 object AdminConsole {
 

@@ -57,8 +57,8 @@ object $name$Build extends Build {
   //Anthing added to console will be here automatically 
   val initialConsoleString: String = """
   	println("Welcome to the utility console")
-	AdminConsole.init
-	import AdminConsole._
+	$org$.$name;format="norm"$.AdminConsole.init
+	import  $org$.$name;format="norm"$.AdminConsole._
   """
 
 }
