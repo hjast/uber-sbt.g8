@@ -1,8 +1,8 @@
-uber-sbt.g8
-=============
-
 ###Über sbt template###
-***A highly opionated sbt template with a nice assortment plugins, a admin console and dependencies ready to go.***
+
+#### G8 & Go ####
+
+**A highly opionated sbt template with tons of nice plugins, an admin console and dependencies ready to go!**
 
 ####Motivation####
 
