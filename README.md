@@ -2,7 +2,7 @@
 
 #### G8 & Go ####
 
-**A highly opionated sbt template with tons of nice plugins, an admin console and dependencies ready to go!**
+**A highly opinionated sbt template with tons of nice plugins, an admin console and dependencies ready to go!**
 
 ####Motivation####
 
