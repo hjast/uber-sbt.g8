@@ -261,7 +261,7 @@ with NoSql {
   
   /** Akka libraries **/
   object akka extends Akka {
-	  def all = Seq(akkaActor, akkaAgent, akkaCamel, akkaDataflow, akkaFileMilebox, akkaKernel, 
+	  def all = Seq(akkaActor, akkaAgent, akkaCamel, akkaDataflow, akkaFileMailbox, akkaKernel, 
 		  akkaMailboxesCommon, akkaOsgi, akkaOsgiAries,akkaRemote, akkaSlf4j, akkaTransactor, akkaTestkit, akkaZeromq)
 		  def actor = akkaActor
 		  def agent = akkaAgent
